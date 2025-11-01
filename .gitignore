@@ -1,0 +1,4 @@
+cleaned_data/
+.gitignore
+__pycache__/
+dataset/
