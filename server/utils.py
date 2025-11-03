@@ -1,35 +1,52 @@
 import cv2
 import base64
 import numpy as np
-import pywt
+import json
+from keras.models import load_model
+from keras_facenet import FaceNet
 
-def haar_transform(image, mode='haar', level=1):
-    img_array = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) # Convert to grayscale
+__class_name_to_number = None
+__class_number_to_name = None
 
-    img_array = np.float32(img_array) / 255.0 # Converting to float and Normalize the image
+__embedder = None
+__model = None
 
-    coeffs = pywt.wavedec2(img_array, mode, level) # Apply Haar Wavelet Transform
-    coeffs_H = list(coeffs)
-    coeffs_H[0] *= 0 # Set Approximation coefficients to zero
 
-    h_img = pywt.waverec2(coeffs_H, mode) # Reconstruct the image using modified coefficients
-    h_img = h_img * 255
-    h_img = np.uint8(h_img)
+def predict(path = None, b64_data = None, ):
 
-    return h_img
+    img_rgb = detect_face_and_eyes(path, b64_data)
 
-def clf_img(b64_str, file_path=None):
-    images = detect_face_and_eyes(file_path, b64_str)
-    for img in images:
-        scaled_img = cv2.resize(img, (64, 64)) # Resize to 32x32
-        
-        haar_img = haar_transform(scaled_img)
-        haar_img = cv2.resize(haar_img, (64, 64)) # Resize to 32x32 
+    if img_rgb is None:
+        print("Image not found or face/eyes not detected.")
+        return None
+    
+    embed = __embedder.embeddings([img_rgb])[0]
 
-        combined = np.vstack((scaled_img.reshape(64*64*3,1), haar_img.reshape(64*64,1))) # combine original and haar images
-        final_img = combined.reshape(1, 64*64*3 + 64*64).astype(float) # Reshape for model input
+    pred = __model.predict(np.expand_dims(embed, axis=0))[0]
+    label_map_rev = {v: k for k, v in __class_name_to_number.items()}
+    confidences = {label_map_rev[idx]: float(conf) for idx, conf in enumerate(pred)}
+
+    return confidences
+
+def load_saved_artifacts():
+    print("loading saved artifacts...start")
+    global __class_name_to_number
+    global __class_number_to_name
+
+    with open("artifacts/class_dictionary.json", "r") as f:
+        __class_name_to_number = json.load(f)
+        __class_number_to_name = {v:k for k,v in __class_name_to_number.items()}
+
+    global __model
+    global __embedder
+    if __model is None:
+        __embedder = FaceNet()
+        __model = load_model('artifacts/face_classifier_model.h5')
+        __model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+    print("loading saved artifacts...done")
 
 def b64_to_image(b64_str):
+
     encoded_data = b64_str.split(',')[1] if ',' in b64_str else b64_str
     nparr = np.frombuffer(base64.b64decode(encoded_data), np.uint8)
     img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
@@ -39,27 +56,30 @@ def get_b64():
     with open("b64.txt") as f:
         return f.read() 
     
-def detect_face_and_eyes(path, b64_str):
+def detect_face_and_eyes(path, b64_data):
 
-    faces_cascade = cv2.CascadeClassifier("server/haar_cacades/haarcascade_frontalface_alt2.xml")
-    eyes_cascade = cv2.CascadeClassifier("server/haar_cacades/haarcascade_eye.xml")
+    eyes_cascade = cv2.CascadeClassifier("haar_cacades/haarcascade_eye.xml")
+    faces_cascade = cv2.CascadeClassifier("haar_cacades/haarcascade_frontalface_alt2.xml")
 
+    
     if path:
         img = cv2.imread(path)
     else:
-        img = b64_to_image(b64_str)
-
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)    
-    faces = faces_cascade.detectMultiScale(gray_img, 1.3, 5)
-
+        img = b64_to_image(b64_data)
+        
+    faces = faces_cascade.detectMultiScale(img, 1.3, 5)
+    
     for (x, y, w, h) in faces:
         img_face = cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 3)
-        cropped_gray = gray_img[y:y + h, x:x + w]
         cropped_face = img_face[y:y + h, x:x + w]
-
-        eyes = eyes_cascade.detectMultiScale(cropped_gray)
+        
+        eyes = eyes_cascade.detectMultiScale(cropped_face)
+        
         if len(eyes) >= 2:
-            return cropped_face
+            cropped_face_rgb = cv2.cvtColor(cropped_face, cv2.COLOR_BGR2RGB)
+            return cv2.resize(cropped_face_rgb, (160, 160))
+    return None
     
 if __name__ == '__main__':
-    print(clf_img(get_b64()), None)
+    load_saved_artifacts()
+    print(predict(path="jackman-hugh.jpg"))
