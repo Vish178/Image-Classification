@@ -73,5 +73,13 @@ Open `http://localhost:8080/app.html` in your browser.
 ## Brief Description
 This project demonstrates a practical application of deep learning for face recognition, combining FaceNet embeddings with a custom classifier and a user-friendly web interface. It is suitable for learning, demos, or as a base for more advanced face recognition systems.
 
+
+Inspired by:  
+[![IMAGE ALT TEXT HER](https://img.youtube.com/vi/qWXXHjV3JHI/0.jpg)](https://www.youtube.com/watch?v=qWXXHjV3JHI)
+---
+---
+Dataset Used: https://www.kaggle.com/datasets/vishesh1412/celebrity-face-image-dataset/data
+---
 ---
 For questions or contributions, please open an issue or pull request.
+---
