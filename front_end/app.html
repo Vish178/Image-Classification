@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sports Person Classifier</title>
+    <title>Celebrity Classifier</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="./dropzone.min.css">
     <link rel="stylesheet" href="./app.css">
@@ -17,59 +17,61 @@
 
     <div class="container">
         <div class="row">
-        <div class="col card-wrapper" data-player="lionel_messi">
+            <div class="col-12" id="bestCelebrityHolder" style="display:none; text-align:center; margin-bottom:30px;">
+                <!-- Large image and name will be injected here by JS -->
+            </div>
+            <!-- Existing card-wrapper grid remains for reference or selection -->
+            <div class="col card-wrapper" data-player="Brad Pitt">
                 <div class="card border-0">
                     <div class="position-relative rounded-circle overflow-hidden mx-auto custom-circle-image">
-                        <img class="w-100 h-100" src="./images/messi.jpeg" alt="Card image cap">
+                        <img class="w-100 h-100" src="./thumnails/Brad Pitt.jpg" alt="Card image cap">
                     </div>
                     <div class="card-body text-center mt-4">
-                        <h4 class="text-uppercase card-title">Lionel Messi</h4>
+                        <h4 class="text-uppercase card-title">Brad Pitt</h4>
                         </p>
                     </div>
                 </div>
             </div>            
-            <div class="col card-wrapper" data-player="maria_sharapova">
-                    <div class="card border-0">
-                        <div class="position-relative rounded-circle overflow-hidden mx-auto custom-circle-image">
-                            <img class="w-100 h-100" src="./images/sharapova.jpeg" alt="Card image cap">
-                        </div>
-                        <div class="card-body text-center mt-4">
-                            <h4 class="text-uppercase card-title">Maria Sharapova</h4>
-                            </p>
-                        </div>
-                    </div>
-            </div>            
-            <div class="col card-wrapper" data-player="roger_federer">
-                    <div class="card border-0">
-                        <div class="position-relative rounded-circle overflow-hidden mx-auto custom-circle-image">
-                            <img class="w-100 h-100" src="./images/federer.jpeg" alt="Card image cap">
-                        </div>
-                        <div class="card-body text-center mt-4">
-                            <h4 class="text-uppercase card-title">Roger Federer</h4>
-                            </p>
-                        </div>
-                    </div>
-            </div>          
-
-            <div class="col card-wrapper" data-player="serena_williams">
+            <div class="col card-wrapper" data-player="Hugh Jackman">
                 <div class="card border-0">
                     <div class="position-relative rounded-circle overflow-hidden mx-auto custom-circle-image">
-                        <img class="w-100 h-100" src="./images/serena.jpeg" alt="Card image cap">
+                        <img class="w-100 h-100" src="./thumnails/Hugh Jackman.jpg" alt="Card image cap">
                     </div>
                     <div class="card-body text-center mt-4">
-                        <h4 class="text-uppercase card-title">Serena Williams</h4>
+                        <h4 class="text-uppercase card-title">Hugh Jackman</h4>
+                        </p>
+                    </div>
+                </div>
+            </div>            
+            <div class="col card-wrapper" data-player="Johnny Depp">
+                <div class="card border-0">
+                    <div class="position-relative rounded-circle overflow-hidden mx-auto custom-circle-image">
+                        <img class="w-100 h-100" src="./thumnails/Johnny Depp.jpg" alt="Card image cap">
+                    </div>
+                    <div class="card-body text-center mt-4">
+                        <h4 class="text-uppercase card-title">Johnny Depp</h4>
+                        </p>
+                    </div>
+                </div>
+            </div>          
+            <div class="col card-wrapper" data-player="Robert Downey Jr">
+                <div class="card border-0">
+                    <div class="position-relative rounded-circle overflow-hidden mx-auto custom-circle-image">
+                        <img class="w-100 h-100" src="./thumnails/RDJ.jpg" alt="Card image cap">
+                    </div>
+                    <div class="card-body text-center mt-4">
+                        <h4 class="text-uppercase card-title">Robert Downey Jr</h4>
                         </p>
                     </div>
                 </div>
             </div>      
-
-            <div class="col card-wrapper" data-player="virat_kohli">
+            <div class="col card-wrapper" data-player="Will Smith">
                 <div class="card border-0">
                     <div class="position-relative rounded-circle overflow-hidden mx-auto custom-circle-image">
-                        <img class="w-100 h-100" src="./images/virat.jpeg" alt="Card image cap">
+                        <img class="w-100 h-100" src="./thumnails/Will Smith.jpg" alt="Card image cap">
                     </div>
                     <div class="card-body text-center mt-4">
-                        <h4 class="text-uppercase card-title">Virat Kohli</h4>
+                        <h4 class="text-uppercase card-title">Will Smith</h4>
                         </p>
                     </div>
                 </div>
@@ -105,28 +107,28 @@
             <div class="col-sm-4" id="divClassTable">
                 <table id="classTable">
                         <tr>
-                            <th>Player</th>
-                            <th>Probability Score</th>
+                            <th>Celebrity</th>
+                            <th>Confidence Score</th>
                         </tr>
                         <tr>
-                            <td>Leonel Messi</td>
-                            <td id="score_lionel_messi"></td>
+                            <td>Brad Pitt</td>
+                            <td id="score_Brad_Pitt"></td>
                         </tr>
                         <tr>
-                            <td>Maria Sharapova</td>
-                            <td id="score_maria_sharapova"></td>
+                            <td>Hugh Jackman</td>
+                            <td id="score_Hugh_Jackman"></td>
                         </tr>
                         <tr>
-                            <td>Rodger Federer</td>
-                            <td id="score_roger_federer"></td>
+                            <td>Johnny Depp</td>
+                            <td id="score_Johnny_Depp"></td>
                         </tr>
                         <tr>
-                            <td>Serena Williams</td>
-                            <td id="score_serena_williams"></td>
+                            <td>Robert Downey Jr</td>
+                            <td id="score_Robert_Downey_Jr"></td>
                         </tr>
                         <tr>
-                            <td>Virat Kohli</td>
-                            <td id="score_virat_kohli"></td>
+                            <td>Will Smith</td>
+                            <td id="score_Will_Smith"></td>
                         </tr>
                 </table>
             </div>
