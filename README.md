@@ -1,5 +1,5 @@
 # Celebrity Face Classifier
-![alt text](https://github.com/Vish178/Image-Classification/blob/master/front_end/thumnails/Screenshot%202025-11-04%20094454.png)
+![alt text](https://github.com/Vish178/Image-Classification/blob/master/front_end/thumnails/Screenshot.png)
 ## Project Overview
 This project is a web-based celebrity face recognition/classification system. It uses deep learning (FaceNet embeddings + a custom MLP classifier) to identify celebrities from uploaded images. The frontend is built with HTML, CSS, and JavaScript, while the backend uses Flask and Keras/TensorFlow.
 
